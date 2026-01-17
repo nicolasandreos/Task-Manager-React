@@ -4,7 +4,7 @@ import { FaTasks } from "react-icons/fa";
 
 const Sidebar = () => {
   return (
-    <div className="min-h-screen max-w-72 bg-white">
+    <div className="min-h-screen w-90 bg-white">
       <div className="space-y-4 px-8 py-6">
         <h1 className="text-xl font-semibold text-[#00ADB5]">Task Manager</h1>
         <p className="text-sm">
@@ -15,7 +15,7 @@ const Sidebar = () => {
         </p>
       </div>
 
-      <div className="flex flex-col gap-2 px-2">
+      <div className="mt-4 flex flex-col gap-2 px-2">
         <SidebarButton variant="selected">
           <div className="flex items-center gap-2 font-normal">
             <AiFillHome />
