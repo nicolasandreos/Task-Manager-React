@@ -1,6 +1,6 @@
 import Checkbox from "./Checkbox";
 
-const TaskItem = ({ task, onChangeCheckboxTask }) => {
+const TaskItem = ({ task, onChangeCheckboxTask, children }) => {
   const getVariantType = () => {
     switch (task.status) {
       case "done":
@@ -14,11 +14,14 @@ const TaskItem = ({ task, onChangeCheckboxTask }) => {
 
   return (
     <div
-      className={`flex items-center gap-4.5 rounded-lg p-3 ${getVariantType()}`}
+      className={`flex w-full items-center justify-between rounded-lg p-3 ${getVariantType()}`}
     >
-      <Checkbox task={task} onChangeCheckboxTask={onChangeCheckboxTask} />
+      <div className={`flex gap-4.5`}>
+        <Checkbox task={task} onChangeCheckboxTask={onChangeCheckboxTask} />
 
-      <p className="">{task.title}</p>
+        <p className="">{task.title}</p>
+      </div>
+      <div className="flex gap-3 text-xl text-[#9A9C9F]">{children}</div>
     </div>
   );
 };

@@ -28,6 +28,12 @@ const Tasks = () => {
     setTasks(newTasks);
   };
 
+  const handleDeleteTask = (taskId) => {
+    const newTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(newTasks);
+    toast.warning("Event start time cannot be earlier than 8am");
+  };
+
   const morningTasks = tasks.filter((task) => task.period === "morning");
   const eveningTasks = tasks.filter((task) => task.period === "evening");
   const nightTasks = tasks.filter((task) => task.period === "night");
@@ -35,6 +41,7 @@ const Tasks = () => {
   return (
     <div className="w-full space-y-6 rounded-lg bg-white p-6">
       <TaskSection
+        handleDeleteTask={handleDeleteTask}
         onChangeCheckboxTask={onChangeCheckboxTask}
         tasks={morningTasks}
       >
@@ -42,6 +49,7 @@ const Tasks = () => {
         Manhã
       </TaskSection>
       <TaskSection
+        handleDeleteTask={handleDeleteTask}
         onChangeCheckboxTask={onChangeCheckboxTask}
         tasks={eveningTasks}
       >
@@ -49,6 +57,7 @@ const Tasks = () => {
         Tarde
       </TaskSection>
       <TaskSection
+        handleDeleteTask={handleDeleteTask}
         onChangeCheckboxTask={onChangeCheckboxTask}
         tasks={nightTasks}
       >
