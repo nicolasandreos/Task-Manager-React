@@ -6,7 +6,27 @@ import { useState } from "react";
 import TASKS from "../constants/tasks";
 
 const Tasks = () => {
-  const [tasks] = useState(TASKS);
+  const [tasks, setTasks] = useState(TASKS);
+
+  const onChangeCheckboxTask = (taskId) => {
+    const newTasks = tasks.map((task) => {
+      if (task.id !== taskId) {
+        return task;
+      }
+
+      if (task.status === "done") {
+        return { ...task, status: "to_do" };
+      }
+      if (task.status === "in_progress") {
+        return { ...task, status: "done" };
+      }
+      if (task.status === "to_do") {
+        return { ...task, status: "in_progress" };
+      }
+    });
+    console.log(newTasks);
+    setTasks(newTasks);
+  };
 
   const morningTasks = tasks.filter((task) => task.period === "morning");
   const eveningTasks = tasks.filter((task) => task.period === "evening");
@@ -14,15 +34,24 @@ const Tasks = () => {
 
   return (
     <div className="w-full space-y-6 rounded-lg bg-white p-6">
-      <TaskSection tasks={morningTasks}>
+      <TaskSection
+        onChangeCheckboxTask={onChangeCheckboxTask}
+        tasks={morningTasks}
+      >
         <LuSunMedium />
         Manhã
       </TaskSection>
-      <TaskSection tasks={eveningTasks}>
+      <TaskSection
+        onChangeCheckboxTask={onChangeCheckboxTask}
+        tasks={eveningTasks}
+      >
         <CiCloudSun />
         Tarde
       </TaskSection>
-      <TaskSection tasks={nightTasks}>
+      <TaskSection
+        onChangeCheckboxTask={onChangeCheckboxTask}
+        tasks={nightTasks}
+      >
         <MdOutlineNightlight />
         Noite
       </TaskSection>

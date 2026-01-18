@@ -1,6 +1,6 @@
 import Checkbox from "./Checkbox";
 
-const TaskItem = ({ task }) => {
+const TaskItem = ({ task, onChangeCheckboxTask }) => {
   const getVariantType = () => {
     switch (task.status) {
       case "done":
@@ -16,7 +16,7 @@ const TaskItem = ({ task }) => {
     <div
       className={`flex items-center gap-4.5 rounded-lg p-3 ${getVariantType()}`}
     >
-      <Checkbox task={task} />
+      <Checkbox task={task} onChangeCheckboxTask={onChangeCheckboxTask} />
 
       <p className="">{task.title}</p>
     </div>

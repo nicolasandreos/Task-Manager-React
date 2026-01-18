@@ -1,7 +1,7 @@
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaCheck } from "react-icons/fa";
 
-const Checkbox = ({ task }) => {
+const Checkbox = ({ task, onChangeCheckboxTask }) => {
   const getCheckboxVariantType = () => {
     switch (task.status) {
       case "done":
@@ -15,10 +15,12 @@ const Checkbox = ({ task }) => {
   return (
     <label
       htmlFor={task.id}
-      className={`relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-md p-1.5 ${getCheckboxVariantType()}`}
+      className={`relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-md p-1.5 transition-all duration-300 ${getCheckboxVariantType()}`}
     >
       <input
         type="checkbox"
+        checked={task.status === "done"}
+        onChange={() => onChangeCheckboxTask(task.id)}
         id={task.id}
         className="absolute h-full w-full cursor-pointer opacity-0"
       />
