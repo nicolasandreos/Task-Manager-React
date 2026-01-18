@@ -16,13 +16,13 @@ const Sidebar = () => {
       </div>
 
       <div className="mt-4 flex flex-col gap-2 px-2">
-        <SidebarButton variant="selected">
+        <SidebarButton>
           <div className="flex items-center gap-2 font-normal">
             <AiFillHome />
             Início
           </div>
         </SidebarButton>
-        <SidebarButton>
+        <SidebarButton variant="selected">
           <div className="flex items-center gap-2 font-normal">
             <FaTasks />
             Minhas Tarefas
