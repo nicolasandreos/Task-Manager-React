@@ -4,6 +4,7 @@ import { CiCloudSun } from "react-icons/ci";
 import { MdOutlineNightlight } from "react-icons/md";
 import { useState } from "react";
 import TASKS from "../constants/tasks";
+import { toast } from "sonner";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState(TASKS);
@@ -15,12 +16,15 @@ const Tasks = () => {
       }
 
       if (task.status === "done") {
+        toast.success("Tarefa reiniciada");
         return { ...task, status: "to_do" };
       }
       if (task.status === "in_progress") {
+        toast.success("Tarefa concluida");
         return { ...task, status: "done" };
       }
       if (task.status === "to_do") {
+        toast.success("Tarefa em progresso");
         return { ...task, status: "in_progress" };
       }
     });
@@ -31,7 +35,7 @@ const Tasks = () => {
   const handleDeleteTask = (taskId) => {
     const newTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(newTasks);
-    toast.warning("Event start time cannot be earlier than 8am");
+    toast.success("Tarefa deletada");
   };
 
   const morningTasks = tasks.filter((task) => task.period === "morning");
