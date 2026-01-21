@@ -16,15 +16,15 @@ const Tasks = () => {
       }
 
       if (task.status === "done") {
-        toast.success("Tarefa reiniciada");
+        toast.success("Task restarted");
         return { ...task, status: "to_do" };
       }
       if (task.status === "in_progress") {
-        toast.success("Tarefa concluida");
+        toast.success("Task completed");
         return { ...task, status: "done" };
       }
       if (task.status === "to_do") {
-        toast.success("Tarefa em progresso");
+        toast.success("Task in progress");
         return { ...task, status: "in_progress" };
       }
     });

@@ -8,10 +8,8 @@ const Sidebar = () => {
       <div className="space-y-4 px-8 py-6">
         <h1 className="text-xl font-semibold text-[#00ADB5]">Task Manager</h1>
         <p className="text-sm">
-          Um simples{" "}
-          <span className="font-semibold text-[#00ADB5]">
-            organizador de tarefas
-          </span>
+          A simple{" "}
+          <span className="font-semibold text-[#00ADB5]">task manager</span>
         </p>
       </div>
 
@@ -19,13 +17,13 @@ const Sidebar = () => {
         <SidebarButton>
           <div className="flex items-center gap-2 font-normal">
             <AiFillHome />
-            Início
+            Home
           </div>
         </SidebarButton>
         <SidebarButton variant="selected">
           <div className="flex items-center gap-2 font-normal">
             <FaTasks />
-            Minhas Tarefas
+            My Tasks
           </div>
         </SidebarButton>
       </div>
