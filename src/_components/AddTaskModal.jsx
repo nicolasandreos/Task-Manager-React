@@ -4,6 +4,7 @@ import Input from "./Input";
 import Button from "./Button";
 import { useRef } from "react";
 import { CSSTransition } from "react-transition-group";
+import Select from "./Select";
 
 const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
   const nodeRef = useRef(null);
@@ -29,15 +30,17 @@ const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
               Please fill the form below
             </p>
           </div>
+
           <div className="flex flex-col gap-4">
             <Input label="Title" id="title" placeholder="Title of the task" />
-            <Input label="Hour" id="hour" placeholder="Select" />
+            <Select />
             <Input
               label="Description"
               id="description"
               placeholder="Description of the task"
             />
           </div>
+
           <div className="mt-4 flex justify-between gap-3">
             <Button
               onClick={handleModalInteraction}
