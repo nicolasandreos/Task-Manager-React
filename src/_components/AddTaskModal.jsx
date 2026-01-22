@@ -2,12 +2,21 @@ import { createPortal } from "react-dom";
 import "./modalTransition.css";
 import Input from "./Input";
 import Button from "./Button";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import Select from "./Select";
 
 const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
   const nodeRef = useRef(null);
+  const [title, setTitle] = useState("");
+  const [time, setTime] = useState("morning");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    setTitle("");
+    setTime("morning");
+    setDescription("");
+  }, []);
 
   return createPortal(
     <CSSTransition
@@ -32,16 +41,27 @@ const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
           </div>
 
           <div className="flex flex-col gap-4">
-            <Input label="Title" id="title" placeholder="Title of the task" />
-            <Select />
             <Input
+              onChange={(event) => setTitle(event.target.value)}
+              label="Title"
+              id="title"
+              placeholder="Title of the task"
+              value={title}
+            />
+            <Select
+              value={time}
+              onChange={(event) => setTime(event.target.value)}
+            />
+            <Input
+              onChange={(event) => setDescription(event.target.value)}
               label="Description"
               id="description"
               placeholder="Description of the task"
+              value={description}
             />
           </div>
 
-          <div className="mt-4 flex justify-between gap-3">
+          <div className="mt-4 flex w-full justify-between gap-3">
             <Button
               onClick={handleModalInteraction}
               className="w-full"
