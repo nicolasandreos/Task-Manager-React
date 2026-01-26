@@ -1,22 +1,21 @@
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaCheck } from "react-icons/fa";
+import { tv } from "tailwind-variants";
 
 const Checkbox = ({ task, onChangeCheckboxTask }) => {
-  const getCheckboxVariantType = () => {
-    switch (task.status) {
-      case "done":
-        return "bg-[#34f1ff]";
-      case "in_progress":
-        return "bg-amber-200";
-      case "to_do":
-        return "bg-[#e0e0e0]";
-    }
-  };
+  const checkbox = tv({
+    base: "relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-md p-1.5 transition-all duration-300",
+    variants: {
+      status: {
+        done: "bg-[#34f1ff]",
+        in_progress: "bg-amber-200",
+        to_do: "bg-[#e0e0e0]",
+      },
+    },
+  });
+
   return (
-    <label
-      htmlFor={task.id}
-      className={`relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-md p-1.5 transition-all duration-300 ${getCheckboxVariantType()}`}
-    >
+    <label htmlFor={task.id} className={`${checkbox({ status: task.status })}`}>
       <input
         type="checkbox"
         checked={task.status === "done"}
