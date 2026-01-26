@@ -2,21 +2,43 @@ import { createPortal } from "react-dom";
 import "./modalTransition.css";
 import Input from "./Input";
 import Button from "./Button";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import Select from "./Select";
 import { v4 } from "uuid";
+import InputError from "./InputError";
 
 const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
   const nodeRef = useRef(null);
-  const [title, setTitle] = useState("");
-  const [time, setTime] = useState("morning");
-  const [description, setDescription] = useState("");
+  const titleRef = useRef();
+  const dateRef = useRef();
+  const descriptionRef = useRef();
+  const [errors, setErrors] = useState({});
 
   const handleSubmitTask = () => {
-    if (!title || !time || !description) {
-      return alert("Fill all inputs!");
+    setErrors({});
+    const errorsList = {};
+    const title = titleRef.current.value.trim();
+    const time = dateRef.current.value.trim();
+    const description = descriptionRef.current.value.trim();
+
+    if (!title) {
+      errorsList.title = "Title is required";
     }
+
+    if (!time) {
+      errorsList.time = "Time is required";
+    }
+
+    if (!description) {
+      errorsList.description = "Description is required";
+    }
+
+    if (errorsList.title || errorsList.time || errorsList.description) {
+      setErrors(errorsList);
+      return;
+    }
+
     onSubmitTask({
       id: v4(),
       title,
@@ -25,10 +47,11 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
       status: "to_do",
     });
 
-    setTitle("");
-    setTime("morning");
-    setDescription("");
+    handleModalInteraction();
+  };
 
+  const handleCancelModal = () => {
+    setErrors({});
     handleModalInteraction();
   };
 
@@ -56,28 +79,28 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
 
           <div className="flex flex-col gap-4">
             <Input
-              onChange={(event) => setTitle(event.target.value)}
               label="Title"
               id="title"
+              ref={titleRef}
               placeholder="Title of the task"
-              value={title}
             />
-            <Select
-              value={time}
-              onChange={(event) => setTime(event.target.value)}
-            />
+            {errors.title && <InputError message={errors.title} />}
+
+            <Select ref={dateRef} />
+            {errors.date && <InputError message={errors.date} />}
+
             <Input
-              onChange={(event) => setDescription(event.target.value)}
+              ref={descriptionRef}
               label="Description"
               id="description"
               placeholder="Description of the task"
-              value={description}
             />
+            {errors.description && <InputError message={errors.description} />}
           </div>
 
           <div className="mt-4 flex w-full justify-between gap-3">
             <Button
-              onClick={handleModalInteraction}
+              onClick={handleCancelModal}
               className="w-full"
               size="large"
               variant="tertiary"
