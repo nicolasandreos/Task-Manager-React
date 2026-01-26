@@ -61,7 +61,7 @@ const Tasks = () => {
       {/* HEADER */}
       <div className="w-full pt-16">
         <Header title="My Tasks" subtitle="My Tasks">
-          <Button variant="secondary">
+          <Button color="secondary">
             <FaRegTrashCan />
             Clean Tasks
           </Button>

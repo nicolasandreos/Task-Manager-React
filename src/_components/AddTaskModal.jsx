@@ -103,7 +103,7 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
               onClick={handleCancelModal}
               className="w-full"
               size="large"
-              variant="tertiary"
+              color="tertiary"
             >
               Cancel
             </Button>
