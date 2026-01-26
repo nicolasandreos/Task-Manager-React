@@ -69,10 +69,10 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
       >
         <div className="flex w-90 flex-col items-center justify-center rounded-xl bg-white p-5 shadow-xl">
           <div className="mb-4 flex flex-col gap-1 text-center">
-            <h2 className="text-2xl font-semibold text-[#35383E]">
+            <h2 className="text-dark-blue text-2xl font-semibold">
               Add New Task
             </h2>
-            <p className="font-light text-[#9A9C9F]">
+            <p className="text-text-gray font-light">
               Please fill the form below
             </p>
           </div>

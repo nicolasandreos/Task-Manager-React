@@ -1,7 +1,7 @@
 const SidebarButton = ({ children, variant }) => {
   const getVariantType = () => {
     return variant === "selected"
-      ? "bg-[#E6F7F8] text-[#00ADB5] font-semibold"
+      ? "bg-[#E6F7F8] text-primary font-semibold"
       : "";
   };
 

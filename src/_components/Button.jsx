@@ -10,9 +10,9 @@ const Button = ({
       case "primary":
         return "bg-[#00c5cf8c] text-white";
       case "secondary":
-        return "text-[#818181]";
+        return "text-dark-gray";
       case "tertiary":
-        return "bg-[#EEEEEE] text-[#35383E]";
+        return "bg-light-gray text-dark-blue";
     }
   };
 

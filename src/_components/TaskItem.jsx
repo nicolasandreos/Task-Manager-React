@@ -6,7 +6,7 @@ const TaskItem = ({ task, onChangeCheckboxTask, children }) => {
       case "done":
         return "text-[#002C2E] bg-[#00f2ff1c]";
       case "in_progress":
-        return "bg-[#ffeabf54] text-[#c08000]";
+        return "bg-[#ffeabf54] text-process";
       case "to_do":
         return "bg-[#d1d1d11c] text-[#002C2E]";
     }
@@ -21,7 +21,7 @@ const TaskItem = ({ task, onChangeCheckboxTask, children }) => {
 
         <p className="">{task.title}</p>
       </div>
-      <div className="flex gap-3 text-xl text-[#9A9C9F]">{children}</div>
+      <div className="text-text-gray flex gap-3 text-xl">{children}</div>
     </div>
   );
 };
