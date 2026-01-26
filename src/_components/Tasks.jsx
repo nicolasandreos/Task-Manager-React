@@ -5,9 +5,19 @@ import { MdOutlineNightlight } from "react-icons/md";
 import { useState } from "react";
 import TASKS from "../constants/tasks";
 import { toast } from "sonner";
+import Header from "./Header";
+import Button from "./Button";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
+import AddTaskModal from "./AddTaskModal";
 
 const Tasks = () => {
+  const [isOpen, setIsOPen] = useState(false);
   const [tasks, setTasks] = useState(TASKS);
+
+  const handleModalInteraction = () => {
+    setIsOPen(!isOpen);
+  };
 
   const onChangeCheckboxTask = (taskId) => {
     const newTasks = tasks.map((task) => {
@@ -38,37 +48,64 @@ const Tasks = () => {
     toast.success("Tarefa deletada");
   };
 
+  const addTask = (task) => {
+    setTasks([...tasks, task]);
+  };
+
   const morningTasks = tasks.filter((task) => task.period === "morning");
   const eveningTasks = tasks.filter((task) => task.period === "evening");
   const nightTasks = tasks.filter((task) => task.period === "night");
 
   return (
-    <div className="w-full space-y-6 rounded-lg bg-white p-6">
-      <TaskSection
-        handleDeleteTask={handleDeleteTask}
-        onChangeCheckboxTask={onChangeCheckboxTask}
-        tasks={morningTasks}
-      >
-        <LuSunMedium />
-        Manhã
-      </TaskSection>
-      <TaskSection
-        handleDeleteTask={handleDeleteTask}
-        onChangeCheckboxTask={onChangeCheckboxTask}
-        tasks={eveningTasks}
-      >
-        <CiCloudSun />
-        Tarde
-      </TaskSection>
-      <TaskSection
-        handleDeleteTask={handleDeleteTask}
-        onChangeCheckboxTask={onChangeCheckboxTask}
-        tasks={nightTasks}
-      >
-        <MdOutlineNightlight />
-        Noite
-      </TaskSection>
-    </div>
+    <>
+      {/* HEADER */}
+      <div className="w-full pt-16">
+        <Header title="My Tasks" subtitle="My Tasks">
+          <Button variant="secondary">
+            <FaRegTrashCan />
+            Clean Tasks
+          </Button>
+          <Button onClick={handleModalInteraction}>
+            <FaPlus />
+            New Task
+          </Button>
+        </Header>
+      </div>
+
+      <div className="w-full space-y-6 rounded-lg bg-white p-6">
+        <TaskSection
+          handleDeleteTask={handleDeleteTask}
+          onChangeCheckboxTask={onChangeCheckboxTask}
+          tasks={morningTasks}
+        >
+          <LuSunMedium />
+          Manhã
+        </TaskSection>
+        <TaskSection
+          handleDeleteTask={handleDeleteTask}
+          onChangeCheckboxTask={onChangeCheckboxTask}
+          tasks={eveningTasks}
+        >
+          <CiCloudSun />
+          Tarde
+        </TaskSection>
+        <TaskSection
+          handleDeleteTask={handleDeleteTask}
+          onChangeCheckboxTask={onChangeCheckboxTask}
+          tasks={nightTasks}
+        >
+          <MdOutlineNightlight />
+          Noite
+        </TaskSection>
+      </div>
+
+      {/* MODAL */}
+      <AddTaskModal
+        onSubmitTask={addTask}
+        handleModalInteraction={handleModalInteraction}
+        isOpen={isOpen}
+      />
+    </>
   );
 };
 

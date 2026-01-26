@@ -5,18 +5,32 @@ import Button from "./Button";
 import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import Select from "./Select";
+import { v4 } from "uuid";
 
-const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
+const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
   const nodeRef = useRef(null);
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("morning");
   const [description, setDescription] = useState("");
 
-  useEffect(() => {
+  const handleSubmitTask = () => {
+    if (!title || !time || !description) {
+      return alert("Fill all inputs!");
+    }
+    onSubmitTask({
+      id: v4(),
+      title,
+      period: time,
+      description,
+      status: "to_do",
+    });
+
     setTitle("");
     setTime("morning");
     setDescription("");
-  }, []);
+
+    handleModalInteraction();
+  };
 
   return createPortal(
     <CSSTransition
@@ -70,7 +84,7 @@ const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
             >
               Cancel
             </Button>
-            <Button className="w-full" size="large">
+            <Button onClick={handleSubmitTask} className="w-full" size="large">
               Save
             </Button>
           </div>

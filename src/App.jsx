@@ -18,28 +18,10 @@ function App() {
       <div className="flex h-screen w-screen">
         <Sidebar />
         <div className="w-full space-y-6 px-8">
-          {/* HEADER */}
-          <div className="w-full pt-16">
-            <Header title="My Tasks" subtitle="My Tasks">
-              <Button variant="secondary">
-                <FaRegTrashCan />
-                Clean Tasks
-              </Button>
-              <Button onClick={handleModalInteraction}>
-                <FaPlus />
-                New Task
-              </Button>
-            </Header>
-          </div>
-
           {/* TASKS */}
           <Tasks />
         </div>
       </div>
-      <AddTaskModal
-        handleModalInteraction={handleModalInteraction}
-        isOpen={isOpen}
-      />
     </>
   );
 }
