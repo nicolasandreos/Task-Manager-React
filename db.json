@@ -1,0 +1,39 @@
+{
+  "tasks": [
+    {
+      "id": 3,
+      "title": "Code review",
+      "status": "done",
+      "description": "Review pull requests and provide feedback on recent changes.",
+      "period": "evening"
+    },
+    {
+      "id": 4,
+      "title": "Update database schema",
+      "status": "in_progress",
+      "description": "Apply new relationships and optimize existing database tables.",
+      "period": "evening"
+    },
+    {
+      "id": 6,
+      "title": "Fix login bug",
+      "status": "to_do",
+      "description": "Investigate and resolve authentication issues on the login page.",
+      "period": "evening"
+    },
+    {
+      "id": 7,
+      "title": "Study JavaScript patterns",
+      "status": "in_progress",
+      "description": "Learn common design patterns used in modern JavaScript applications.",
+      "period": "night"
+    },
+    {
+      "id": 8,
+      "title": "Prepare presentation",
+      "status": "to_do",
+      "description": "Create slides for the upcoming sprint review meeting.",
+      "period": "evening"
+    }
+  ]
+}

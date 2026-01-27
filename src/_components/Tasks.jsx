@@ -2,8 +2,7 @@ import TaskSection from "./TaskSection";
 import { LuSunMedium } from "react-icons/lu";
 import { CiCloudSun } from "react-icons/ci";
 import { MdOutlineNightlight } from "react-icons/md";
-import { useState } from "react";
-import TASKS from "../constants/tasks";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Header from "./Header";
 import Button from "./Button";
@@ -13,7 +12,25 @@ import AddTaskModal from "./AddTaskModal";
 
 const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
-  const [tasks, setTasks] = useState(TASKS);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const getTasks = () => {
+      fetch("http://localhost:3000/tasks", {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((tasks) => {
+          console.log(tasks);
+          setTasks(tasks);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    getTasks();
+  }, []);
 
   const handleModalInteraction = () => {
     setIsOPen(!isOpen);
@@ -42,14 +59,34 @@ const Tasks = () => {
     setTasks(newTasks);
   };
 
-  const handleDeleteTask = (taskId) => {
+  const handleDeleteTask = async (taskId) => {
+    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      toast.error("Failed to delete task");
+      return;
+    }
     const newTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(newTasks);
     toast.success("Tarefa deletada");
   };
 
-  const addTask = (task) => {
+  const addTask = async (task) => {
+    const response = await fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
+    });
+    if (!response.ok) {
+      toast.error("Failed to add task");
+      return;
+    }
+
     setTasks([...tasks, task]);
+    toast.success("Task added successfully");
   };
 
   const morningTasks = tasks.filter((task) => task.period === "morning");
