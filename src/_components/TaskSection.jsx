@@ -1,6 +1,9 @@
+import { useState } from "react";
 import TaskItem from "./TaskItem";
 import { IoOpenOutline } from "react-icons/io5";
 import { IoTrashOutline } from "react-icons/io5";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { toast } from "sonner";
 
 const TaskSection = ({
   children,
@@ -15,13 +18,11 @@ const TaskSection = ({
       </div>
       {tasks.map((task) => {
         return (
-          <TaskItem onChangeCheckboxTask={onChangeCheckboxTask} task={task}>
-            <IoTrashOutline
-              onClick={() => handleDeleteTask(task.id)}
-              className="transition-all duration-200 hover:text-red-300"
-            />
-            <IoOpenOutline />
-          </TaskItem>
+          <TaskItem
+            onChangeCheckboxTask={onChangeCheckboxTask}
+            task={task}
+            handleDeleteTask={handleDeleteTask}
+          />
         );
       })}
     </div>
