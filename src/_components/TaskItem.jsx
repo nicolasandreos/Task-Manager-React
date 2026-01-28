@@ -5,6 +5,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Link } from "react-router";
 
 const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -55,8 +56,9 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
             className="transition-all duration-200 hover:text-red-300"
           />
         )}
-
-        <IoOpenOutline />
+        <Link to={`/task/${task.id}`}>
+          <IoOpenOutline />
+        </Link>
       </div>
     </div>
   );
