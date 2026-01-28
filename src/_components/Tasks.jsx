@@ -66,18 +66,6 @@ const Tasks = () => {
   };
 
   const addTask = async (task) => {
-    const response = await fetch("http://localhost:3000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
-    });
-    if (!response.ok) {
-      toast.error("Failed to add task");
-      return;
-    }
-
     setTasks([...tasks, task]);
     toast.success("Task added successfully");
   };

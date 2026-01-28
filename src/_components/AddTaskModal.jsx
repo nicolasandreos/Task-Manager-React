@@ -7,6 +7,7 @@ import { CSSTransition } from "react-transition-group";
 import Select from "./Select";
 import { v4 } from "uuid";
 import InputError from "./InputError";
+import { toast } from "sonner";
 
 const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
   const nodeRef = useRef(null);
@@ -14,40 +15,56 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
   const dateRef = useRef();
   const descriptionRef = useRef();
   const [errors, setErrors] = useState({});
+  const [isAddingTask, setIsAddingTask] = useState(false);
 
-  const handleSubmitTask = () => {
+  const handleSubmitTask = async () => {
+    setIsAddingTask(true);
     setErrors({});
     const errorsList = {};
     const title = titleRef.current.value.trim();
     const time = dateRef.current.value.trim();
     const description = descriptionRef.current.value.trim();
 
-    if (!title) {
-      errorsList.title = "Title is required";
+    try {
+      if (!title) {
+        errorsList.title = "Title is required";
+      }
+
+      if (!time) {
+        errorsList.time = "Time is required";
+      }
+
+      if (!description) {
+        errorsList.description = "Description is required";
+      }
+
+      if (errorsList.title || errorsList.time || errorsList.description) {
+        setErrors(errorsList);
+        return;
+      }
+      const task = { title, period: time, description, status: "to_do" };
+
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+
+      if (!response.ok) {
+        toast.error("Failed to add task");
+        return;
+      }
+
+      onSubmitTask(task);
+
+      handleModalInteraction();
+    } catch (error) {
+      console.error("Error adding task:", error);
+    } finally {
+      setIsAddingTask(false);
     }
-
-    if (!time) {
-      errorsList.time = "Time is required";
-    }
-
-    if (!description) {
-      errorsList.description = "Description is required";
-    }
-
-    if (errorsList.title || errorsList.time || errorsList.description) {
-      setErrors(errorsList);
-      return;
-    }
-
-    onSubmitTask({
-      id: v4(),
-      title,
-      period: time,
-      description,
-      status: "to_do",
-    });
-
-    handleModalInteraction();
   };
 
   const handleCancelModal = () => {
@@ -107,8 +124,13 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
             >
               Cancel
             </Button>
-            <Button onClick={handleSubmitTask} className="w-full" size="large">
-              Save
+            <Button
+              disabled={isAddingTask}
+              onClick={handleSubmitTask}
+              className="w-full"
+              size="large"
+            >
+              {isAddingTask ? "Saving..." : "Save"}
             </Button>
           </div>
         </div>

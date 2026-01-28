@@ -6,6 +6,7 @@ const Button = ({
   size = "small",
   className,
   onClick,
+  ...rest
 }) => {
   const button = tv({
     base: "flex items-center justify-center gap-2 font-semibold self-end",
@@ -28,6 +29,7 @@ const Button = ({
 
   return (
     <button
+      {...rest}
       onClick={onClick}
       className={`${button({ color, size })} ${className}`}
     >
