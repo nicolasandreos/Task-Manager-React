@@ -9,8 +9,8 @@
     },
     {
       "id": 7,
-      "title": "Study JavaScript patterns",
-      "status": "in_progress",
+      "title": "Study JuavaScript pattern",
+      "status": "to_do",
       "description": "Learn common design patterns used in modern JavaScript applications.",
       "period": "night"
     },
@@ -27,6 +27,13 @@
       "description": "teste1234",
       "status": "to_do",
       "id": 44
+    },
+    {
+      "title": "teste12",
+      "period": "morning",
+      "description": "teste12",
+      "status": "to_do",
+      "id": 45
     }
   ]
 }

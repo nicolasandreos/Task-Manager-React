@@ -32,7 +32,7 @@ const TaskDetail = () => {
         title: data.title.trim(),
         period: data.period.trim(),
         description: data.description.trim(),
-        status: "to_do",
+        status: data.status,
       };
 
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {

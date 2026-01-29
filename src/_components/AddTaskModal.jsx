@@ -5,43 +5,26 @@ import Button from "./Button";
 import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import Select from "./Select";
-import { v4 } from "uuid";
 import InputError from "./InputError";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 
 const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
   const nodeRef = useRef(null);
-  const titleRef = useRef();
-  const dateRef = useRef();
-  const descriptionRef = useRef();
-  const [errors, setErrors] = useState({});
-  const [isAddingTask, setIsAddingTask] = useState(false);
 
-  const handleSubmitTask = async () => {
-    setIsAddingTask(true);
-    setErrors({});
-    const errorsList = {};
-    const title = titleRef.current.value.trim();
-    const time = dateRef.current.value.trim();
-    const description = descriptionRef.current.value.trim();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    isSubmitting,
+  } = useForm();
+
+  const handleSubmitTask = async (data) => {
+    const title = data.title.trim();
+    const time = data.period.trim();
+    const description = data.description.trim();
 
     try {
-      if (!title) {
-        errorsList.title = "Title is required";
-      }
-
-      if (!time) {
-        errorsList.time = "Time is required";
-      }
-
-      if (!description) {
-        errorsList.description = "Description is required";
-      }
-
-      if (errorsList.title || errorsList.time || errorsList.description) {
-        setErrors(errorsList);
-        return;
-      }
       const task = { title, period: time, description, status: "to_do" };
 
       const response = await fetch("http://localhost:3000/tasks", {
@@ -62,14 +45,7 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
       handleModalInteraction();
     } catch (error) {
       console.error("Error adding task:", error);
-    } finally {
-      setIsAddingTask(false);
     }
-  };
-
-  const handleCancelModal = () => {
-    setErrors({});
-    handleModalInteraction();
   };
 
   return createPortal(
@@ -94,45 +70,65 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <Input
-              label="Title"
-              id="title"
-              ref={titleRef}
-              placeholder="Title of the task"
-            />
-            {errors.title && <InputError message={errors.title} />}
+          <form
+            onSubmit={handleSubmit(handleSubmitTask)}
+            className="flex w-full flex-col gap-4"
+          >
+            <div className="flex flex-col gap-4 px-5">
+              <Input
+                {...register("title", {
+                  required: "Title is required",
+                  validate: (value) =>
+                    value.trim() !== "" || "Title cannot be empty",
+                })}
+                label="Title"
+                id="title"
+                placeholder="Title of the task"
+              />
+              {errors.title && <InputError message={errors.title.message} />}
 
-            <Select ref={dateRef} />
-            {errors.date && <InputError message={errors.date} />}
+              <Select
+                {...register("period", {
+                  required: "Period is required",
+                })}
+              />
+              {errors.period && <InputError message={errors.period.message} />}
 
-            <Input
-              ref={descriptionRef}
-              label="Description"
-              id="description"
-              placeholder="Description of the task"
-            />
-            {errors.description && <InputError message={errors.description} />}
-          </div>
+              <Input
+                {...register("description", {
+                  required: "Description is required",
+                  validate: (value) =>
+                    value.trim() !== "" || "Description cannot be empty",
+                })}
+                label="Description"
+                id="description"
+                placeholder="Description of the task"
+              />
+              {errors.description && (
+                <InputError message={errors.description.message} />
+              )}
+            </div>
 
-          <div className="mt-4 flex w-full justify-between gap-3">
-            <Button
-              onClick={handleCancelModal}
-              className="w-full"
-              size="large"
-              color="tertiary"
-            >
-              Cancel
-            </Button>
-            <Button
-              disabled={isAddingTask}
-              onClick={handleSubmitTask}
-              className="w-full"
-              size="large"
-            >
-              {isAddingTask ? "Saving..." : "Save"}
-            </Button>
-          </div>
+            <div className="mt-4 flex w-full justify-between gap-3">
+              <Button
+                onClick={() => handleModalInteraction()}
+                className="w-full"
+                size="large"
+                color="tertiary"
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={isSubmitting}
+                onClick={handleSubmitTask}
+                className="w-full"
+                size="large"
+                type="submit"
+              >
+                {isSubmitting ? "Saving..." : "Save"}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </CSSTransition>,
