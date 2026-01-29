@@ -21,7 +21,6 @@ const Tasks = () => {
       })
         .then((response) => response.json())
         .then((tasks) => {
-          console.log(tasks);
           setTasks(tasks);
         })
         .catch((error) => {

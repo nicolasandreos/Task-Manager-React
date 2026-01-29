@@ -8,50 +8,32 @@ import { FaChevronRight } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
 import Input from "../_components/Input";
 import Sidebar from "../_components/Sidebar";
+import { useForm } from "react-hook-form";
+import InputError from "../_components/InputError";
+import Select from "../_components/Select";
 
 const TaskDetail = () => {
   const { taskId } = useParams();
-  const titleRef = useRef();
-  const dateRef = useRef();
-  const descriptionRef = useRef();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    isSubmitting,
+  } = useForm();
+
   const [task, setTask] = useState();
-  const [errors, setErrors] = useState({});
-  const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
-  const handleClickBackPage = () => {
-    console.log("ok");
-    navigate(-1);
-  };
-
-  const handleSaveTask = async () => {
-    setIsSaving(true);
-    setErrors({});
-    const errorsList = {};
-    const title = titleRef.current.value.trim();
-    const time = dateRef.current.value.trim();
-    const description = descriptionRef.current.value.trim();
-
+  const handleSaveTask = async (data) => {
     try {
-      if (!title) {
-        errorsList.title = "Title is required";
-      }
-
-      if (!time) {
-        errorsList.time = "Time is required";
-      }
-
-      if (!description) {
-        errorsList.description = "Description is required";
-      }
-
-      if (errorsList.title || errorsList.time || errorsList.description) {
-        setErrors(errorsList);
-        return;
-      }
-
-      const task = { title, period: time, description, status: "to_do" };
+      const task = {
+        title: data.title.trim(),
+        period: data.period.trim(),
+        description: data.description.trim(),
+        status: "to_do",
+      };
 
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: "PATCH",
@@ -68,8 +50,6 @@ const TaskDetail = () => {
       navigate(-1);
     } catch (error) {
       console.error("Error updating task:", error);
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -104,10 +84,11 @@ const TaskDetail = () => {
       }
       const task = await response.json();
       setTask(task);
+      reset(task);
     };
 
     fetchTaskById();
-  }, [taskId]);
+  }, [taskId, reset]);
 
   return (
     <div className="flex h-screen w-screen">
@@ -135,45 +116,63 @@ const TaskDetail = () => {
           </Button>
 
           <button
-            onClick={handleClickBackPage}
+            onClick={() => navigate(-1)}
             className="bg-primary absolute -top-12 left-0 flex h-10 w-10 items-center justify-center rounded-full text-xl text-white"
           >
             <FaArrowLeft />
           </button>
         </Header>
 
-        <div className="space-y-6 px-6">
+        <form
+          onSubmit={handleSubmit(handleSaveTask)}
+          className="flex flex-col gap-6 px-6"
+        >
           <Input
-            defaultValue={task?.title}
-            ref={titleRef}
-            placeholder={task?.title}
+            {...register("title", {
+              required: "Title is required",
+              validate: (value) =>
+                value.trim() !== "" || "Title cannot be empty",
+            })}
+            placeholder="Task name"
             label="Name"
             id={task?.title}
           />
-          <Input
-            defaultValue={task?.period}
-            ref={dateRef}
-            placeholder={task?.period}
+          {errors.title && <InputError message={errors.title.message} />}
+
+          <Select
+            {...register("period", {
+              required: "Time is required",
+              validate: (value) =>
+                value.trim() !== "" || "Period cannot be empty",
+            })}
+            placeholder="Task period"
             label="Time"
             id={task?.period}
           />
+          {errors.period && <InputError message={errors.period.message} />}
+
           <Input
-            defaultValue={task?.description}
-            ref={descriptionRef}
-            placeholder={task?.description}
+            {...register("description", {
+              required: "Description is required",
+              validate: (value) =>
+                value.trim() !== "" || "Description cannot be empty",
+            })}
+            placeholder="Task description"
             label="Description"
             id={task?.description}
           />
-        </div>
-
-        <div className="flex gap-2.5 self-end">
-          <Button size="large" color="tertiary" onClick={handleClickBackPage}>
-            Cancel
-          </Button>
-          <Button onClick={handleSaveTask} disabled={isSaving} size="large">
-            {isSaving ? "Saving..." : "Save"}
-          </Button>
-        </div>
+          {errors.description && (
+            <InputError message={errors.description.message} />
+          )}
+          <div className="flex gap-2.5 self-end">
+            <Button size="large" color="tertiary" onClick={() => navigate(-1)}>
+              Cancel
+            </Button>
+            <Button disabled={isSubmitting} size="large" type="submit">
+              {isSubmitting ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
