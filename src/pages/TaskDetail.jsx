@@ -1,23 +1,95 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import Header from "../_components/Header";
 import Button from "../_components/Button";
 import { IoTrashOutline } from "react-icons/io5";
 import { FaChevronRight } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
-import InputLabel from "../_components/InputLabel";
 import Input from "../_components/Input";
 import Sidebar from "../_components/Sidebar";
 
 const TaskDetail = () => {
   const { taskId } = useParams();
+  const titleRef = useRef();
+  const dateRef = useRef();
+  const descriptionRef = useRef();
   const [task, setTask] = useState();
+  const [errors, setErrors] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
   const handleClickBackPage = () => {
     console.log("ok");
     navigate(-1);
+  };
+
+  const handleSaveTask = async () => {
+    setIsSaving(true);
+    setErrors({});
+    const errorsList = {};
+    const title = titleRef.current.value.trim();
+    const time = dateRef.current.value.trim();
+    const description = descriptionRef.current.value.trim();
+
+    try {
+      if (!title) {
+        errorsList.title = "Title is required";
+      }
+
+      if (!time) {
+        errorsList.time = "Time is required";
+      }
+
+      if (!description) {
+        errorsList.description = "Description is required";
+      }
+
+      if (errorsList.title || errorsList.time || errorsList.description) {
+        setErrors(errorsList);
+        return;
+      }
+
+      const task = { title, period: time, description, status: "to_do" };
+
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+
+      if (!response.ok) {
+        toast.error("Failed to add task");
+        return;
+      }
+      navigate(-1);
+    } catch (error) {
+      console.error("Error updating task:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      setIsDeleting(true);
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        return toast.error("Failed to delete task");
+      }
+      setIsDeleting(false);
+      navigate(-1);
+      toast.success("Task deleted successfully");
+    } catch (error) {
+      toast.error("An error occurred while deleting the task");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   useEffect(() => {
@@ -44,16 +116,22 @@ const TaskDetail = () => {
         <Header
           subtitle={
             <p className="flex items-center gap-1">
-              <span className="text-gray-400">Minhas Tarefas</span>
+              <Link to="/">
+                <span className="text-gray-400">Minhas Tarefas</span>
+              </Link>
               <FaChevronRight />
               {task?.title}
             </p>
           }
           title={task?.title}
         >
-          <Button color="danger">
+          <Button
+            onClick={handleDeleteClick}
+            color="danger"
+            disabled={isDeleting}
+          >
             <IoTrashOutline />
-            Deletar Tarefa
+            {isDeleting ? "Deleting..." : "Delete Task"}
           </Button>
 
           <button
@@ -65,9 +143,23 @@ const TaskDetail = () => {
         </Header>
 
         <div className="space-y-6 px-6">
-          <Input placeholder={task?.title} label="Name" id={task?.title} />
-          <Input placeholder={task?.period} label="Time" id={task?.period} />
           <Input
+            defaultValue={task?.title}
+            ref={titleRef}
+            placeholder={task?.title}
+            label="Name"
+            id={task?.title}
+          />
+          <Input
+            defaultValue={task?.period}
+            ref={dateRef}
+            placeholder={task?.period}
+            label="Time"
+            id={task?.period}
+          />
+          <Input
+            defaultValue={task?.description}
+            ref={descriptionRef}
             placeholder={task?.description}
             label="Description"
             id={task?.description}
@@ -75,10 +167,12 @@ const TaskDetail = () => {
         </div>
 
         <div className="flex gap-2.5 self-end">
-          <Button size="large" color="tertiary">
+          <Button size="large" color="tertiary" onClick={handleClickBackPage}>
             Cancel
           </Button>
-          <Button size="large">Save</Button>
+          <Button onClick={handleSaveTask} disabled={isSaving} size="large">
+            {isSaving ? "Saving..." : "Save"}
+          </Button>
         </div>
       </div>
     </div>

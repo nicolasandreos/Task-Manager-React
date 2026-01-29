@@ -9,7 +9,7 @@ const Button = ({
   ...rest
 }) => {
   const button = tv({
-    base: "flex items-center justify-center gap-2 font-semibold self-end",
+    base: `flex items-center justify-center gap-2 font-semibold self-end ${rest.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`,
     variants: {
       color: {
         primary: "bg-primary text-white",

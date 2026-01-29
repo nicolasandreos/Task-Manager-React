@@ -1,20 +1,6 @@
 {
   "tasks": [
     {
-      "id": 3,
-      "title": "Code review",
-      "status": "done",
-      "description": "Review pull requests and provide feedback on recent changes.",
-      "period": "evening"
-    },
-    {
-      "id": 4,
-      "title": "Update database schema",
-      "status": "in_progress",
-      "description": "Apply new relationships and optimize existing database tables.",
-      "period": "evening"
-    },
-    {
       "id": 6,
       "title": "Fix login bug",
       "status": "to_do",
@@ -36,46 +22,11 @@
       "period": "evening"
     },
     {
-      "title": "teset",
-      "period": "morning",
-      "description": "teset",
-      "status": "to_do",
-      "id": 21
-    },
-    {
-      "title": "teste",
-      "period": "morning",
-      "description": "tesete",
-      "status": "to_do",
-      "id": 41
-    },
-    {
-      "title": "teste",
-      "period": "morning",
-      "description": "teste",
-      "status": "to_do",
-      "id": 42
-    },
-    {
-      "title": "teste",
-      "period": "morning",
-      "description": "teste",
-      "status": "to_do",
-      "id": 43
-    },
-    {
       "title": "teste",
       "period": "morning",
       "description": "teste",
       "status": "to_do",
       "id": 44
-    },
-    {
-      "title": "teste",
-      "period": "morning",
-      "description": "teste",
-      "status": "to_do",
-      "id": 45
     }
   ]
 }
