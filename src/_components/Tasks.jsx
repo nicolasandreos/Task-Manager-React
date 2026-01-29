@@ -77,18 +77,17 @@ const Tasks = () => {
   return (
     <>
       {/* HEADER */}
-      <div className="w-full pt-16">
-        <Header title="My Tasks" subtitle="My Tasks">
-          <Button color="secondary">
-            <FaRegTrashCan />
-            Clean Tasks
-          </Button>
-          <Button onClick={handleModalInteraction}>
-            <FaPlus />
-            New Task
-          </Button>
-        </Header>
-      </div>
+
+      <Header title="My Tasks" subtitle="My Tasks">
+        <Button color="secondary">
+          <FaRegTrashCan />
+          Clean Tasks
+        </Button>
+        <Button onClick={handleModalInteraction}>
+          <FaPlus />
+          New Task
+        </Button>
+      </Header>
 
       <div className="w-full space-y-6 rounded-lg bg-white p-6">
         <TaskSection

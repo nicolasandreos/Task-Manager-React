@@ -15,6 +15,7 @@ const Button = ({
         primary: "bg-primary text-white",
         secondary: "text-dark-gray",
         tertiary: "bg-light-gray text-dark-blue",
+        danger: "bg-danger text-white",
       },
       size: {
         small: "px-3 py-1 rounded-md",
