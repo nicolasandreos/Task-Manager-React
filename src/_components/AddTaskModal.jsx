@@ -15,9 +15,16 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
     isSubmitting,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      title: "",
+      period: "morning",
+      description: "",
+    },
+  });
 
   const handleSubmitTask = async (data) => {
     const title = data.title.trim();
@@ -46,6 +53,11 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
     } catch (error) {
       console.error("Error adding task:", error);
     }
+  };
+
+  const handleCloseButton = () => {
+    handleModalInteraction();
+    reset({ title: "", period: "morning", description: "" });
   };
 
   return createPortal(
@@ -111,10 +123,11 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
 
             <div className="mt-4 flex w-full justify-between gap-3">
               <Button
-                onClick={() => handleModalInteraction()}
+                onClick={handleCloseButton}
                 className="w-full"
                 size="large"
                 color="tertiary"
+                type="button"
               >
                 Cancel
               </Button>
