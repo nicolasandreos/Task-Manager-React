@@ -9,69 +9,44 @@ import Button from "./Button";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import AddTaskModal from "./AddTaskModal";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
-  const [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
-    const getTasks = () => {
-      fetch("http://localhost:3000/tasks", {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((tasks) => {
-          setTasks(tasks);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-
-    getTasks();
-  }, []);
+  const queryClient = useQueryClient();
+  const { data: tasks, refetch } = useQuery({
+    queryKey: "tasks",
+    queryFn: async () => {
+      const response = await fetch("http://localhost:3000/tasks");
+      return await response.json();
+    },
+  });
 
   const handleModalInteraction = () => {
     setIsOPen(!isOpen);
   };
 
   const onChangeCheckboxTask = (taskId) => {
-    const newTasks = tasks.map((task) => {
-      if (task.id !== taskId) {
-        return task;
-      }
-
-      if (task.status === "done") {
-        toast.success("Task restarted");
-        return { ...task, status: "to_do" };
-      }
-      if (task.status === "in_progress") {
-        toast.success("Task completed");
-        return { ...task, status: "done" };
-      }
-      if (task.status === "to_do") {
-        toast.success("Task in progress");
-        return { ...task, status: "in_progress" };
-      }
-    });
-    console.log(newTasks);
-    setTasks(newTasks);
+    refetch();
   };
 
-  const handleDeleteTask = async (taskId) => {
-    const newTasks = tasks.filter((task) => task.id !== taskId);
-    setTasks(newTasks);
+  const onDeleteTaskSuccess = async (taskId) => {
+    const newTasks = tasks?.filter((task) => task.id !== taskId);
+    queryClient.setQueryData("tasks", newTasks);
     toast.success("Tarefa deletada");
   };
 
-  const addTask = async (task) => {
-    setTasks([...tasks, task]);
+  const onAddTaskSuccess = async (task) => {
     toast.success("Task added successfully");
+    queryClient.setQueryData("tasks", (currentTasks) => {
+      return [...currentTasks, task];
+    });
   };
 
-  const morningTasks = tasks.filter((task) => task.period === "morning");
-  const eveningTasks = tasks.filter((task) => task.period === "evening");
-  const nightTasks = tasks.filter((task) => task.period === "night");
+  const morningTasks = tasks?.filter((task) => task.period === "morning");
+  const eveningTasks = tasks?.filter((task) => task.period === "evening");
+  const nightTasks = tasks?.filter((task) => task.period === "night");
 
   return (
     <>
@@ -90,7 +65,7 @@ const Tasks = () => {
 
       <div className="w-full space-y-6 rounded-lg bg-white p-6">
         <TaskSection
-          handleDeleteTask={handleDeleteTask}
+          handleDeleteTask={onDeleteTaskSuccess}
           onChangeCheckboxTask={onChangeCheckboxTask}
           tasks={morningTasks}
         >
@@ -98,7 +73,7 @@ const Tasks = () => {
           Manhã
         </TaskSection>
         <TaskSection
-          handleDeleteTask={handleDeleteTask}
+          handleDeleteTask={onDeleteTaskSuccess}
           onChangeCheckboxTask={onChangeCheckboxTask}
           tasks={eveningTasks}
         >
@@ -106,7 +81,7 @@ const Tasks = () => {
           Tarde
         </TaskSection>
         <TaskSection
-          handleDeleteTask={handleDeleteTask}
+          handleDeleteTask={onDeleteTaskSuccess}
           onChangeCheckboxTask={onChangeCheckboxTask}
           tasks={nightTasks}
         >
@@ -117,7 +92,7 @@ const Tasks = () => {
 
       {/* MODAL */}
       <AddTaskModal
-        onSubmitTask={addTask}
+        onSubmitTask={onAddTaskSuccess}
         handleModalInteraction={handleModalInteraction}
         isOpen={isOpen}
       />

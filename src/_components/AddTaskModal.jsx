@@ -50,6 +50,7 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
       onSubmitTask(task);
 
       handleModalInteraction();
+      reset({ title: "", period: "morning", description: "" });
     } catch (error) {
       console.error("Error adding task:", error);
     }

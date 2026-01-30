@@ -40,10 +40,51 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
     }
   };
 
+  const handleUpdateTaskStatus = async (taskId) => {
+    try {
+      const getResponse = await fetch(`http://localhost:3000/tasks/${taskId}`);
+      if (!getResponse.ok) {
+        toast.error("Failed get task details");
+        return;
+      }
+      let task = await getResponse.json();
+
+      if (task.status === "done") {
+        toast.success("Task restarted");
+        task = { ...task, status: "to_do" };
+      }
+      if (task.status === "in_progress") {
+        toast.success("Task completed");
+        task = { ...task, status: "done" };
+      }
+      if (task.status === "to_do") {
+        toast.success("Task in progress");
+        task = { ...task, status: "in_progress" };
+      }
+
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+      if (!response.ok) {
+        toast.error("Failed to update task status");
+        return;
+      }
+      onChangeCheckboxTask();
+    } catch (error) {
+      toast.error("An error occurred while deleting the task");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className={`${taskItem({ status: task.status })}`}>
       <div className={`flex gap-4.5`}>
-        <Checkbox task={task} onChangeCheckboxTask={onChangeCheckboxTask} />
+        <Checkbox task={task} onChangeCheckboxTask={handleUpdateTaskStatus} />
 
         <p className="">{task.title}</p>
       </div>

@@ -6,6 +6,7 @@ import TaskDetail from "./pages/TaskDetail";
 import { Toaster } from "sonner";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -18,9 +19,13 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
-    <Toaster richColors position="bottom-right" />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <Toaster richColors position="bottom-right" />
+    </QueryClientProvider>
   </StrictMode>
 );

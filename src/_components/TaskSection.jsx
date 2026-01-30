@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 const TaskSection = ({
   children,
-  tasks,
+  tasks = [],
   onChangeCheckboxTask,
   handleDeleteTask,
 }) => {
