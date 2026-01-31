@@ -28,7 +28,22 @@ const Tasks = () => {
   };
 
   const onChangeCheckboxTask = (taskId) => {
-    refetch();
+    const newTasks = tasks?.map((task) => {
+      if (task.id !== taskId) {
+        return task;
+      }
+
+      if (task.status === "done") {
+        return { ...task, status: "to_do" };
+      }
+      if (task.status === "in_progress") {
+        return { ...task, status: "done" };
+      }
+      if (task.status === "to_do") {
+        return { ...task, status: "in_progress" };
+      }
+    });
+    queryClient.setQueryData("tasks", newTasks);
   };
 
   const onDeleteTaskSuccess = async (taskId) => {

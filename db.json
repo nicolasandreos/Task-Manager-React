@@ -3,21 +3,21 @@
     {
       "id": 6,
       "title": "Fix login bug",
-      "status": "to_do",
+      "status": "in_progress",
       "description": "Investigate and resolve authentication issues on the login page.",
       "period": "evening"
     },
     {
       "id": 7,
       "title": "Study JuavaScript pattern",
-      "status": "to_do",
+      "status": "done",
       "description": "Learn common design patterns used in modern JavaScript applications.",
       "period": "night"
     },
     {
       "id": 8,
       "title": "Prepare presentation",
-      "status": "to_do",
+      "status": "in_progress",
       "description": "Create slides for the upcoming sprint review meeting.",
       "period": "evening"
     },
@@ -25,14 +25,14 @@
       "title": "dsds",
       "period": "morning",
       "description": "dsd",
-      "status": "in_progress",
+      "status": "done",
       "id": 50
     },
     {
       "title": "oi",
       "period": "morning",
       "description": "oi",
-      "status": "done",
+      "status": "in_progress",
       "id": 51
     },
     {
@@ -46,14 +46,14 @@
       "title": "45",
       "period": "morning",
       "description": "45",
-      "status": "to_do",
+      "status": "in_progress",
       "id": 53
     },
     {
       "title": "sas",
       "period": "morning",
       "description": "as",
-      "status": "to_do",
+      "status": "in_progress",
       "id": 54
     }
   ]

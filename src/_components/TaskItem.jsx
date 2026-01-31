@@ -40,6 +40,21 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
     }
   };
 
+  const setNewTaskStatus = (task) => {
+    if (task.status === "done") {
+      toast.success("Task restarted");
+      return { ...task, status: "to_do" };
+    }
+    if (task.status === "in_progress") {
+      toast.success("Task completed");
+      return { ...task, status: "done" };
+    }
+    if (task.status === "to_do") {
+      toast.success("Task in progress");
+      return { ...task, status: "in_progress" };
+    }
+  };
+
   const handleUpdateTaskStatus = async (taskId) => {
     try {
       const getResponse = await fetch(`http://localhost:3000/tasks/${taskId}`);
@@ -48,19 +63,7 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
         return;
       }
       let task = await getResponse.json();
-
-      if (task.status === "done") {
-        toast.success("Task restarted");
-        task = { ...task, status: "to_do" };
-      }
-      if (task.status === "in_progress") {
-        toast.success("Task completed");
-        task = { ...task, status: "done" };
-      }
-      if (task.status === "to_do") {
-        toast.success("Task in progress");
-        task = { ...task, status: "in_progress" };
-      }
+      task = setNewTaskStatus(task);
 
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: "PATCH",
@@ -73,7 +76,7 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
         toast.error("Failed to update task status");
         return;
       }
-      onChangeCheckboxTask();
+      onChangeCheckboxTask(taskId);
     } catch (error) {
       toast.error("An error occurred while deleting the task");
     } finally {
