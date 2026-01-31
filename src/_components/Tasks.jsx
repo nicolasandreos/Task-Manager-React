@@ -15,7 +15,7 @@ const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
 
   const queryClient = useQueryClient();
-  const { data: tasks, refetch } = useQuery({
+  const { data: tasks } = useQuery({
     queryKey: "tasks",
     queryFn: async () => {
       const response = await fetch("http://localhost:3000/tasks");
@@ -50,13 +50,6 @@ const Tasks = () => {
     const newTasks = tasks?.filter((task) => task.id !== taskId);
     queryClient.setQueryData("tasks", newTasks);
     toast.success("Tarefa deletada");
-  };
-
-  const onAddTaskSuccess = async (task) => {
-    toast.success("Task added successfully");
-    queryClient.setQueryData("tasks", (currentTasks) => {
-      return [...currentTasks, task];
-    });
   };
 
   const morningTasks = tasks?.filter((task) => task.period === "morning");
@@ -107,7 +100,6 @@ const Tasks = () => {
 
       {/* MODAL */}
       <AddTaskModal
-        onSubmitTask={onAddTaskSuccess}
         handleModalInteraction={handleModalInteraction}
         isOpen={isOpen}
       />

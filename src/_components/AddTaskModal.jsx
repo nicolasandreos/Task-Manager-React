@@ -8,9 +8,29 @@ import Select from "./Select";
 import InputError from "./InputError";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
+const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
   const nodeRef = useRef(null);
+  const { mutate } = useMutation({
+    mutationKey: "addTask",
+    mutationFn: async (task) => {
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(task),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      return await response.json();
+    },
+  });
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -30,33 +50,24 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
     const title = data.title.trim();
     const time = data.period.trim();
     const description = data.description.trim();
+    const task = { title, period: time, description, status: "to_do" };
 
-    try {
-      const task = { title, period: time, description, status: "to_do" };
-
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-
-      if (!response.ok) {
-        toast.error("Failed to add task");
-        return;
-      }
-
-      onSubmitTask(task);
-
-      handleModalInteraction();
-      reset({ title: "", period: "morning", description: "" });
-    } catch (error) {
-      console.error("Error adding task:", error);
-    }
+    mutate(task, {
+      onSuccess: () => {
+        queryClient.setQueryData("tasks", (currentTasks) => {
+          return [...currentTasks, task];
+        });
+        reset({ title: "", period: "morning", description: "" });
+        handleCloseModal();
+        toast.success("Task added successfully");
+      },
+      onError: () => {
+        toast.error("An error ocurred to save task");
+      },
+    });
   };
 
-  const handleCloseButton = () => {
+  const handleCloseModal = () => {
     handleModalInteraction();
     reset({ title: "", period: "morning", description: "" });
   };
@@ -124,7 +135,7 @@ const AddTaskModal = ({ isOpen, handleModalInteraction, onSubmitTask }) => {
 
             <div className="mt-4 flex w-full justify-between gap-3">
               <Button
-                onClick={handleCloseButton}
+                onClick={handleCloseModal}
                 className="w-full"
                 size="large"
                 color="tertiary"
