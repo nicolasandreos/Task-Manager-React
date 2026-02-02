@@ -22,53 +22,11 @@
       "period": "evening"
     },
     {
-      "title": "dsds",
-      "period": "morning",
-      "description": "dsd",
-      "status": "done",
-      "id": 50
-    },
-    {
-      "title": "oi",
-      "period": "morning",
-      "description": "oi",
-      "status": "to_do",
-      "id": 51
-    },
-    {
-      "title": "45",
-      "period": "morning",
-      "description": "45",
-      "status": "in_progress",
-      "id": 52
-    },
-    {
-      "title": "45",
-      "period": "morning",
-      "description": "45",
-      "status": "in_progress",
-      "id": 53
-    },
-    {
-      "title": "sas",
-      "period": "morning",
-      "description": "as",
-      "status": "in_progress",
-      "id": 54
-    },
-    {
       "title": "99",
       "period": "morning",
       "description": "99",
       "status": "to_do",
       "id": 55
-    },
-    {
-      "title": "88",
-      "period": "morning",
-      "description": "88",
-      "status": "to_do",
-      "id": 56
     }
   ]
 }

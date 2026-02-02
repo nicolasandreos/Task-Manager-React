@@ -6,9 +6,31 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Link } from "react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
+const TaskItem = ({ task, onChangeCheckboxTask }) => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: `delete-${task.id}`,
+    mutationFn: async (taskId) => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+      return taskId;
+    },
+    onSuccess: (taskId) => {
+      queryClient.setQueryData("tasks", (currentTasks) => {
+        return currentTasks?.filter((t) => t.id !== taskId);
+      });
+      toast.success("Task deleted successfully");
+    },
+    onError: () => {
+      toast.error("Failed to delete task");
+    },
+  });
 
   const taskItem = tv({
     base: "flex w-full items-center justify-between rounded-lg p-3",
@@ -20,25 +42,6 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
       },
     },
   });
-
-  const handleDeleteClick = async (taskId) => {
-    try {
-      setIsDeleting(true);
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        toast.error("Failed to delete task");
-        return;
-      }
-      await handleDeleteTask(taskId);
-      setIsDeleting(false);
-    } catch (error) {
-      toast.error("An error occurred while deleting the task");
-    } finally {
-      setIsDeleting(false);
-    }
-  };
 
   const setNewTaskStatus = (task) => {
     if (task.status === "done") {
@@ -78,9 +81,7 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
       }
       onChangeCheckboxTask(taskId);
     } catch (error) {
-      toast.error("An error occurred while deleting the task");
-    } finally {
-      setIsDeleting(false);
+      toast.error("An error occurred while updating the task status");
     }
   };
 
@@ -92,11 +93,11 @@ const TaskItem = ({ task, onChangeCheckboxTask, handleDeleteTask }) => {
         <p className="">{task.title}</p>
       </div>
       <div className="text-text-gray flex gap-3 text-xl">
-        {isDeleting ? (
+        {isPending ? (
           <AiOutlineLoading3Quarters className="animate-spin text-gray-700" />
         ) : (
           <IoTrashOutline
-            onClick={() => handleDeleteClick(task.id)}
+            onClick={() => mutate(task.id)}
             className="transition-all duration-200 hover:text-red-300"
           />
         )}
