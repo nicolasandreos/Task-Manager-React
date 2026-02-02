@@ -8,10 +8,30 @@ import Button from "./Button";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import AddTaskModal from "./AddTaskModal";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
+  const { mutate } = useMutation({
+    mutationKey: "deleteAllTasks",
+    mutationFn: async () => {
+      for (const task of tasks) {
+        const taskId = task.id;
+        await fetch(`http://localhost:3000/tasks/${taskId}`, {
+          method: "DELETE",
+        });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries("tasks");
+      toast.success("All tasks deleted successfully.");
+    },
+    onError: () => {
+      toast.error("Failed to delete tasks.");
+    },
+  });
+  const queryClient = useQueryClient();
 
   const { data: tasks, refetch } = useQuery({
     queryKey: "tasks",
@@ -29,8 +49,6 @@ const Tasks = () => {
     refetch();
   };
 
-  const handleDeleteAllTasks = () => {};
-
   const morningTasks = tasks?.filter((task) => task.period === "morning");
   const eveningTasks = tasks?.filter((task) => task.period === "evening");
   const nightTasks = tasks?.filter((task) => task.period === "night");
@@ -39,7 +57,7 @@ const Tasks = () => {
     <>
       {/* HEADER */}
       <Header title="My Tasks" subtitle="My Tasks">
-        <Button onClick={handleDeleteAllTasks} color="secondary">
+        <Button onClick={mutate} color="secondary">
           <FaRegTrashCan />
           Clean Tasks
         </Button>
