@@ -6,10 +6,11 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Link } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const TaskItem = ({ task, onChangeCheckboxTask }) => {
   const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationKey: `delete-${task.id}`,
     mutationFn: async (taskId) => {
@@ -29,6 +30,27 @@ const TaskItem = ({ task, onChangeCheckboxTask }) => {
     },
     onError: () => {
       toast.error("Failed to delete task");
+    },
+  });
+
+  const { mutate: updateTaskStatus } = useMutation({
+    mutationKey: `update-status-${task.id}`,
+    mutationFn: async () => {
+      const updatedTask = setNewTaskStatus(task);
+
+      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTask),
+      });
+
+      if (!response.ok) {
+        toast.error("Failed to update task status");
+        return;
+      }
+      onChangeCheckboxTask(task.id);
     },
   });
 
@@ -58,37 +80,10 @@ const TaskItem = ({ task, onChangeCheckboxTask }) => {
     }
   };
 
-  const handleUpdateTaskStatus = async (taskId) => {
-    try {
-      const getResponse = await fetch(`http://localhost:3000/tasks/${taskId}`);
-      if (!getResponse.ok) {
-        toast.error("Failed get task details");
-        return;
-      }
-      let task = await getResponse.json();
-      task = setNewTaskStatus(task);
-
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-      if (!response.ok) {
-        toast.error("Failed to update task status");
-        return;
-      }
-      onChangeCheckboxTask(taskId);
-    } catch (error) {
-      toast.error("An error occurred while updating the task status");
-    }
-  };
-
   return (
     <div className={`${taskItem({ status: task.status })}`}>
       <div className={`flex gap-4.5`}>
-        <Checkbox task={task} onChangeCheckboxTask={handleUpdateTaskStatus} />
+        <Checkbox task={task} onChangeCheckboxTask={updateTaskStatus} />
 
         <p className="">{task.title}</p>
       </div>

@@ -1,9 +1,4 @@
-import { useState } from "react";
 import TaskItem from "./TaskItem";
-import { IoOpenOutline } from "react-icons/io5";
-import { IoTrashOutline } from "react-icons/io5";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { toast } from "sonner";
 
 const TaskSection = ({ children, tasks = [], onChangeCheckboxTask }) => {
   return (
