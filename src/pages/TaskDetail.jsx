@@ -11,6 +11,7 @@ import Sidebar from "../_components/Sidebar";
 import { useForm } from "react-hook-form";
 import InputError from "../_components/InputError";
 import Select from "../_components/Select";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const TaskDetail = () => {
   const { taskId } = useParams();
@@ -22,73 +23,64 @@ const TaskDetail = () => {
     isSubmitting,
   } = useForm();
 
-  const [task, setTask] = useState();
-  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSaveTask = async (data) => {
-    try {
-      const task = {
-        title: data.title.trim(),
-        period: data.period.trim(),
-        description: data.description.trim(),
-        status: data.status,
-      };
+  const { data: task } = useQuery({
+    queryKey: ["task", taskId],
+    queryFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch task");
+      }
+      const data = await response.json();
+      reset(data);
+      return data;
+    },
+    onError: () => {
+      return toast.error("Failed to find details of this task");
+    },
+  });
 
+  const { mutate: deleteTask, isPending: isDeleting } = useMutation({
+    mutationKey: `delete-${taskId}`,
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+    },
+  });
+
+  const { mutate: updateTask, isPending: isUpdating } = useMutation({
+    mutationKey: `update-${taskId}`,
+    mutationFn: async ({ title, period, description, status }) => {
+      const updatedTask = {
+        title: title.trim(),
+        period,
+        description: description.trim(),
+        status,
+      };
       const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(task),
+        body: JSON.stringify(updatedTask),
       });
-
       if (!response.ok) {
-        toast.error("Failed to add task");
-        return;
+        throw new Error("Failed to delete task");
       }
+    },
+    onSuccess: () => {
+      toast.success("Task updated successfully");
       navigate(-1);
-    } catch (error) {
-      console.error("Error updating task:", error);
-    }
-  };
-
-  const handleDeleteClick = async () => {
-    try {
-      setIsDeleting(true);
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        return toast.error("Failed to delete task");
-      }
-      setIsDeleting(false);
-      navigate(-1);
-      toast.success("Task deleted successfully");
-    } catch (error) {
-      toast.error("An error occurred while deleting the task");
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  useEffect(() => {
-    const fetchTaskById = async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        toast.error("Failed to find details of this task");
-        return;
-      }
-      const task = await response.json();
-      setTask(task);
-      reset(task);
-    };
-
-    fetchTaskById();
-  }, [taskId, reset]);
+    },
+    onError: () => {
+      toast.error("Failed to update task");
+    },
+  });
 
   return (
     <div className="flex h-screen w-screen">
@@ -107,7 +99,17 @@ const TaskDetail = () => {
           title={task?.title}
         >
           <Button
-            onClick={handleDeleteClick}
+            onClick={() =>
+              deleteTask(undefined, {
+                onSuccess: () => {
+                  toast.success("Task deleted successfully");
+                  navigate(-1);
+                },
+                onError: () => {
+                  toast.error("Failed to delete task");
+                },
+              })
+            }
             color="danger"
             disabled={isDeleting}
           >
@@ -124,7 +126,7 @@ const TaskDetail = () => {
         </Header>
 
         <form
-          onSubmit={handleSubmit(handleSaveTask)}
+          onSubmit={handleSubmit(updateTask)}
           className="flex flex-col gap-6 px-6"
         >
           <Input

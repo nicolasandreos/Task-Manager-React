@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
+
   const { mutate } = useMutation({
     mutationKey: "deleteAllTasks",
     mutationFn: async () => {
