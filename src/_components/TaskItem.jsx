@@ -4,55 +4,15 @@ import { IoOpenOutline } from "react-icons/io5";
 import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { toast } from "sonner";
-import { useState } from "react";
 import { Link } from "react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import useDeleteTask from "../hooks/data/useDeleteTask";
+import { useUpdateTask } from "../hooks/data/useUpdateTask";
 
-const TaskItem = ({ task, onChangeCheckboxTask }) => {
-  const queryClient = useQueryClient();
+const TaskItem = ({ task }) => {
+  const { mutate: deleteTask, isPending } = useDeleteTask(task.id);
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: `delete-${task.id}`,
-    mutationFn: async (taskId) => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
-      }
-      return taskId;
-    },
-    onSuccess: (taskId) => {
-      queryClient.setQueryData("tasks", (currentTasks) => {
-        return currentTasks?.filter((t) => t.id !== taskId);
-      });
-      toast.success("Task deleted successfully");
-    },
-    onError: () => {
-      toast.error("Failed to delete task");
-    },
-  });
-
-  const { mutate: updateTaskStatus } = useMutation({
-    mutationKey: `update-status-${task.id}`,
-    mutationFn: async () => {
-      const updatedTask = setNewTaskStatus(task);
-
-      const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedTask),
-      });
-
-      if (!response.ok) {
-        toast.error("Failed to update task status");
-        return;
-      }
-      onChangeCheckboxTask(task.id);
-    },
-  });
+  const { mutate: updateTask } = useUpdateTask(task.id);
 
   const taskItem = tv({
     base: "flex w-full items-center justify-between rounded-lg p-3",
@@ -65,25 +25,10 @@ const TaskItem = ({ task, onChangeCheckboxTask }) => {
     },
   });
 
-  const setNewTaskStatus = (task) => {
-    if (task.status === "done") {
-      toast.success("Task restarted");
-      return { ...task, status: "to_do" };
-    }
-    if (task.status === "in_progress") {
-      toast.success("Task completed");
-      return { ...task, status: "done" };
-    }
-    if (task.status === "to_do") {
-      toast.success("Task in progress");
-      return { ...task, status: "in_progress" };
-    }
-  };
-
   return (
     <div className={`${taskItem({ status: task.status })}`}>
       <div className={`flex gap-4.5`}>
-        <Checkbox task={task} onChangeCheckboxTask={updateTaskStatus} />
+        <Checkbox task={task} updateTask={updateTask} />
 
         <p className="">{task.title}</p>
       </div>
@@ -92,7 +37,7 @@ const TaskItem = ({ task, onChangeCheckboxTask }) => {
           <AiOutlineLoading3Quarters className="animate-spin text-gray-700" />
         ) : (
           <IoTrashOutline
-            onClick={() => mutate(task.id)}
+            onClick={deleteTask}
             className="transition-all duration-200 hover:text-red-300"
           />
         )}

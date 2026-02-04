@@ -6,31 +6,12 @@ import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import Select from "./Select";
 import InputError from "./InputError";
-import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useAddTask from "../hooks/data/useAddTask";
 
 const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
   const nodeRef = useRef(null);
-  const { mutate } = useMutation({
-    mutationKey: "addTask",
-    mutationFn: async (task) => {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-
-      if (!response.ok) {
-        throw new Error();
-      }
-
-      return await response.json();
-    },
-  });
-  const queryClient = useQueryClient();
+  const { mutate: addTask } = useAddTask();
 
   const {
     register,
@@ -52,17 +33,10 @@ const AddTaskModal = ({ isOpen, handleModalInteraction }) => {
     const description = data.description.trim();
     const task = { title, period: time, description, status: "to_do" };
 
-    mutate(task, {
+    addTask(task, {
       onSuccess: () => {
-        queryClient.setQueryData("tasks", (currentTasks) => {
-          return [...currentTasks, task];
-        });
         reset({ title: "", period: "morning", description: "" });
         handleCloseModal();
-        toast.success("Task added successfully");
-      },
-      onError: () => {
-        toast.error("An error ocurred to save task");
       },
     });
   };

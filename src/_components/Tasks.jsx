@@ -14,6 +14,14 @@ import { toast } from "sonner";
 const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
 
+  const { data: tasks } = useQuery({
+    queryKey: "tasks",
+    queryFn: async () => {
+      const response = await fetch("http://localhost:3000/tasks");
+      return await response.json();
+    },
+  });
+
   const { mutate } = useMutation({
     mutationKey: "deleteAllTasks",
     mutationFn: async () => {
@@ -32,22 +40,11 @@ const Tasks = () => {
       toast.error("Failed to delete tasks.");
     },
   });
-  const queryClient = useQueryClient();
 
-  const { data: tasks, refetch } = useQuery({
-    queryKey: "tasks",
-    queryFn: async () => {
-      const response = await fetch("http://localhost:3000/tasks");
-      return await response.json();
-    },
-  });
+  const queryClient = useQueryClient();
 
   const handleModalInteraction = () => {
     setIsOPen(!isOpen);
-  };
-
-  const onChangeCheckboxTask = (taskId) => {
-    refetch();
   };
 
   const morningTasks = tasks?.filter((task) => task.period === "morning");
@@ -69,24 +66,15 @@ const Tasks = () => {
       </Header>
 
       <div className="w-full space-y-6 rounded-lg bg-white p-6">
-        <TaskSection
-          onChangeCheckboxTask={onChangeCheckboxTask}
-          tasks={morningTasks}
-        >
+        <TaskSection tasks={morningTasks}>
           <LuSunMedium />
           Manhã
         </TaskSection>
-        <TaskSection
-          onChangeCheckboxTask={onChangeCheckboxTask}
-          tasks={eveningTasks}
-        >
+        <TaskSection tasks={eveningTasks}>
           <CiCloudSun />
           Tarde
         </TaskSection>
-        <TaskSection
-          onChangeCheckboxTask={onChangeCheckboxTask}
-          tasks={nightTasks}
-        >
+        <TaskSection tasks={nightTasks}>
           <MdOutlineNightlight />
           Noite
         </TaskSection>

@@ -11,7 +11,9 @@ import Sidebar from "../_components/Sidebar";
 import { useForm } from "react-hook-form";
 import InputError from "../_components/InputError";
 import Select from "../_components/Select";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useUpdateTask } from "../hooks/data/useUpdateTask";
+import useGetTask from "../hooks/data/useGetTask";
+import useDeleteTask from "../hooks/data/useDeleteTask";
 
 const TaskDetail = () => {
   const { taskId } = useParams();
@@ -25,62 +27,9 @@ const TaskDetail = () => {
 
   const navigate = useNavigate();
 
-  const { data: task } = useQuery({
-    queryKey: ["task", taskId],
-    queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch task");
-      }
-      const data = await response.json();
-      reset(data);
-      return data;
-    },
-    onError: () => {
-      return toast.error("Failed to find details of this task");
-    },
-  });
-
-  const { mutate: deleteTask, isPending: isDeleting } = useMutation({
-    mutationKey: `delete-${taskId}`,
-    mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
-      }
-    },
-  });
-
-  const { mutate: updateTask, isPending: isUpdating } = useMutation({
-    mutationKey: `update-${taskId}`,
-    mutationFn: async ({ title, period, description, status }) => {
-      const updatedTask = {
-        title: title.trim(),
-        period,
-        description: description.trim(),
-        status,
-      };
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedTask),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
-      }
-    },
-    onSuccess: () => {
-      toast.success("Task updated successfully");
-      navigate(-1);
-    },
-    onError: () => {
-      toast.error("Failed to update task");
-    },
-  });
+  const { data: task } = useGetTask(taskId, (data) => reset(data));
+  const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask(taskId);
+  const { mutate: updateTask } = useUpdateTask(taskId);
 
   return (
     <div className="flex h-screen w-screen">
