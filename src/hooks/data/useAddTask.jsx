@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import api from "../../lib/axios";
 
 const useAddTask = (task) => {
   const queryClient = useQueryClient();
@@ -7,19 +8,8 @@ const useAddTask = (task) => {
   return useMutation({
     mutationKey: "addTask",
     mutationFn: async (task) => {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add task");
-      }
-
-      return await response.json();
+      const { data: createdTask } = await api.post("/tasks", task);
+      return createdTask;
     },
     onSuccess: (newTask) => {
       queryClient.setQueryData("tasks", (currentTasks) => {

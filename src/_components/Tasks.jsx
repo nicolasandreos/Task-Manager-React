@@ -10,17 +10,12 @@ import { FaPlus } from "react-icons/fa6";
 import AddTaskModal from "./AddTaskModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import useGetTasks from "../hooks/data/useGetTasks";
 
 const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
 
-  const { data: tasks } = useQuery({
-    queryKey: "tasks",
-    queryFn: async () => {
-      const response = await fetch("http://localhost:3000/tasks");
-      return await response.json();
-    },
-  });
+  const { data: tasks } = useGetTasks();
 
   const { mutate } = useMutation({
     mutationKey: "deleteAllTasks",

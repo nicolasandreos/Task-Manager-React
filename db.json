@@ -22,10 +22,10 @@
       "period": "evening"
     },
     {
-      "title": "sas2",
+      "title": "sas290",
       "period": "morning",
       "description": "as",
-      "status": "in_progress",
+      "status": "done",
       "id": 54
     },
     {
@@ -41,6 +41,13 @@
       "description": "88",
       "status": "to_do",
       "id": 56
+    },
+    {
+      "title": "test",
+      "period": "morning",
+      "description": "test",
+      "status": "to_do",
+      "id": 57
     }
   ]
 }

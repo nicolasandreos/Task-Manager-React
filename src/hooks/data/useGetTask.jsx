@@ -1,18 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { toast } from "sonner";
+import api from "../../lib/axios";
 
 const useGetTask = (taskId, onSuccess2) => {
   return useQuery({
     queryKey: ["task", taskId],
     enabled: !!taskId,
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch task");
-      }
-      const data = await response.json();
-      onSuccess2(data);
-      return data;
+      const { data: task } = await api.get(`/tasks/${taskId}`);
+      onSuccess2(task);
+      return task;
     },
     onError: () => {
       return toast.error("Failed to find details of this task");

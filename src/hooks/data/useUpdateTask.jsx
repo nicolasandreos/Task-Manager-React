@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { toast } from "sonner";
+import api from "../../lib/axios";
 
 export const useUpdateTask = (taskId) => {
   const queryClient = useQueryClient();
@@ -13,17 +15,10 @@ export const useUpdateTask = (taskId) => {
         description: description.trim(),
         status,
       };
-      const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(taskToUpdate),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update task");
-      }
-      const updatedTask = await response.json();
+      const { data: updatedTask } = await api.patch(
+        `/tasks/${taskId}`,
+        taskToUpdate
+      );
       return updatedTask;
     },
     onSuccess: (updatedTask) => {
