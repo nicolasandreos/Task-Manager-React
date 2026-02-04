@@ -1,6 +1,7 @@
+import { NavLink } from "react-router";
 import { tv } from "tailwind-variants";
 
-const SidebarButton = ({ children, variant }) => {
+const SidebarButton = ({ children, to }) => {
   const sidebarButton = tv({
     base: "rounded-md px-6 py-3 text-lg font-normal",
     variants: {
@@ -11,9 +12,14 @@ const SidebarButton = ({ children, variant }) => {
   });
 
   return (
-    <a href="" className={`${sidebarButton({ variant })}`}>
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        isActive ? sidebarButton({ variant: "selected" }) : sidebarButton()
+      }
+    >
       {children}
-    </a>
+    </NavLink>
   );
 };
 
