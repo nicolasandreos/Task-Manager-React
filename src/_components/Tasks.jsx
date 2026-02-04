@@ -8,35 +8,15 @@ import Button from "./Button";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import AddTaskModal from "./AddTaskModal";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import useGetTasks from "../hooks/data/useGetTasks";
+import useDeleteAllTasks from "../hooks/data/useDeleteAllTasks";
 
 const Tasks = () => {
   const [isOpen, setIsOPen] = useState(false);
 
   const { data: tasks } = useGetTasks();
 
-  const { mutate } = useMutation({
-    mutationKey: "deleteAllTasks",
-    mutationFn: async () => {
-      for (const task of tasks) {
-        const taskId = task.id;
-        await fetch(`http://localhost:3000/tasks/${taskId}`, {
-          method: "DELETE",
-        });
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries("tasks");
-      toast.success("All tasks deleted successfully.");
-    },
-    onError: () => {
-      toast.error("Failed to delete tasks.");
-    },
-  });
-
-  const queryClient = useQueryClient();
+  const { mutate: deleteAllTasks } = useDeleteAllTasks();
 
   const handleModalInteraction = () => {
     setIsOPen(!isOpen);
@@ -50,7 +30,7 @@ const Tasks = () => {
     <>
       {/* HEADER */}
       <Header title="My Tasks" subtitle="My Tasks">
-        <Button onClick={mutate} color="secondary">
+        <Button onClick={() => deleteAllTasks(tasks)} color="secondary">
           <FaRegTrashCan />
           Clean Tasks
         </Button>
