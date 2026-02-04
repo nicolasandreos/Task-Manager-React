@@ -1,6 +1,7 @@
 import SidebarButton from "./SidebarButton";
 import { AiFillHome } from "react-icons/ai";
 import { FaTasks } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Sidebar = () => {
   return (
@@ -15,16 +16,20 @@ const Sidebar = () => {
 
       <div className="mt-4 flex flex-col gap-2 px-2">
         <SidebarButton>
-          <div className="flex items-center gap-2 font-normal">
-            <AiFillHome />
-            Home
-          </div>
+          <Link to="/">
+            <div className="flex items-center gap-2 font-normal">
+              <AiFillHome />
+              Home
+            </div>
+          </Link>
         </SidebarButton>
         <SidebarButton variant="selected">
-          <div className="flex items-center gap-2 font-normal">
-            <FaTasks />
-            My Tasks
-          </div>
+          <Link to="/tasks">
+            <div className="flex items-center gap-2 font-normal">
+              <FaTasks />
+              My Tasks
+            </div>
+          </Link>
         </SidebarButton>
       </div>
     </div>
