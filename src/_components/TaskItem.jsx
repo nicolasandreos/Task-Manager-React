@@ -3,9 +3,7 @@ import Checkbox from "./Checkbox";
 import { IoOpenOutline } from "react-icons/io5";
 import { IoTrashOutline } from "react-icons/io5";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { toast } from "sonner";
 import { Link } from "react-router";
-import { useMutation } from "@tanstack/react-query";
 import useDeleteTask from "../hooks/data/useDeleteTask";
 import { useUpdateTask } from "../hooks/data/useUpdateTask";
 

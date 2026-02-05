@@ -1,23 +1,16 @@
 {
   "tasks": [
     {
-      "id": 6,
-      "title": "Fix login bug",
-      "status": "in_progress",
-      "description": "Investigate and resolve authentication issues on the login page.",
-      "period": "evening"
-    },
-    {
       "id": 7,
       "title": "Study JuavaScript pattern",
-      "status": "done",
+      "status": "to_do",
       "description": "Learn common design patterns used in modern JavaScript applications.",
       "period": "night"
     },
     {
       "id": 8,
       "title": "Prepare presentation",
-      "status": "in_progress",
+      "status": "done",
       "description": "Create slides for the upcoming sprint review meeting.",
       "period": "evening"
     },
@@ -25,22 +18,15 @@
       "title": "sas290",
       "period": "morning",
       "description": "as",
-      "status": "done",
+      "status": "to_do",
       "id": 54
     },
     {
       "title": "99",
       "period": "morning",
       "description": "99",
-      "status": "done",
-      "id": 55
-    },
-    {
-      "title": "88",
-      "period": "morning",
-      "description": "88",
       "status": "to_do",
-      "id": 56
+      "id": 55
     },
     {
       "title": "test",
