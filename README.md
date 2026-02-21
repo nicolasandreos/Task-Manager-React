@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+# 📦 Como Rodar o Projeto Localmente
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+```bash
+# Clonar o repositório
+git clone https://github.com/seu-user/seu-repo.git
 
-Currently, two official plugins are available:
+# Entrar na pasta
+cd seu-repo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Instalar dependências
+npm install
 
-## React Compiler
+# Rodar aplicação
+npm run dev
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+# Rodar fake API
+npx json-server --watch db.json --port 3001
 
-## Expanding the ESLint configuration
+---
+# 📝 Task Manager
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Aplicação web para gerenciamento de tarefas desenvolvida com React, consumindo uma API simulada (json-server).  
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+O projeto foi construído com foco em boas práticas de arquitetura frontend, organização de código, padronização de commits e separação de responsabilidades.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+🔗 **Deploy:** https://seu-link.vercel.app  
+📂 **Repositório:** https://github.com/seu-user/seu-repo
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Funcionalidades
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- ✅ Criar tarefas
+- ✏️ Editar tarefas
+- 🗑️ Excluir tarefas
+- 📋 Listar tarefas
+- 🔄 Atualização automática da interface
+- 📡 Consumo de API REST simulada
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### ⚛️ Frontend
+- React
+- Vite
+- React Router DOM
+- TailwindCSS
+- Tailwind Variants
+- Axios
+- TanStack React Query
+- React Hook Form
+
+### 🗄️ Backend (Simulado)
+- json-server
+
+### 🧹 Padronização e Qualidade de Código
+- ESLint
+- Prettier
+- Git Hooks (Husky + lint-staged)
+- Conventional Commits
+
+### 🚀 Deploy
+- Vercel
+
+---
+
+## 🧠 Conceitos e Arquitetura Aplicados
+
+- Componentização e reutilização de componentes
+- Organização por responsabilidades
+- Criação de hooks customizados para requisições HTTP
+- Gerenciamento de estado assíncrono com React Query
+- Separação entre camada de serviço (API) e UI
+- Validação de formulários com React Hook Form
+- Configuração de Design System (cores e tipografia customizadas no Tailwind)
+- Padronização automática de código antes do commit
+- Versionamento seguindo Conventional Commits
+
