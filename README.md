@@ -41,6 +41,11 @@ O projeto foi construído com foco em boas práticas de arquitetura frontend, or
 ### 📌 Listagem de Tarefas
 ![Lista Terefas](./docs/imagem4.png)
 
+## 🔗 API Repository
+
+A API simulada foi desenvolvida separadamente utilizando json-server para simular um ambiente backend independente.
+📂 Repositório da API: https://github.com/nicolasandreos/ToDoTasksReactAPI
+
 ## 🚀 Funcionalidades
 
 - ✅ Criar tarefas
