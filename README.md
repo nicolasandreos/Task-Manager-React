@@ -23,9 +23,6 @@ npx json-server --watch db.json --port 3000
 Aplicação web para gerenciamento de tarefas desenvolvida com React, consumindo uma API simulada (json-server).  
 
 O projeto foi construído com foco em boas práticas de arquitetura frontend, organização de código, padronização de commits e separação de responsabilidades.
-
-🔗 **Deploy:** https://seu-link.vercel.app  
-📂 **Repositório:** https://github.com/seu-user/seu-repo
 ```
 
 ---
