@@ -2,10 +2,11 @@
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/seu-user/seu-repo.git
+🔗 **Deploy:** https://task-manager-react-six-rho.vercel.app
+📂 **Repositório:** git clone https://github.com/nicolasandreos/Task-Manager-React.git
 
 # Entrar na pasta
-cd seu-repo
+cd Task-Manager-React
 
 # Instalar dependências
 npm install
@@ -14,7 +15,7 @@ npm install
 npm run dev
 
 # Rodar fake API
-npx json-server --watch db.json --port 3001
+npx json-server --watch db.json --port 3000
 
 ---
 # 📝 Task Manager
@@ -29,14 +30,30 @@ O projeto foi construído com foco em boas práticas de arquitetura frontend, or
 
 ---
 
+## 📸 Preview
+
+### 🏠 Tela Principal
+![Tela Principal](./docs/imagem1.png)
+
+### ➕ Criar Tarefa
+![Criar Tarefa](./docs/imagem2.png)
+
+### ✏️ Edição de Tarefa
+![Edição](./docs/imagem3.png)
+
+### 📌 Listagem de Tarefas
+![Lista Terefas](./docs/imagem4.png)
+
 ## 🚀 Funcionalidades
 
 - ✅ Criar tarefas
 - ✏️ Editar tarefas
 - 🗑️ Excluir tarefas
 - 📋 Listar tarefas
+- 📌 Atualização de status da tarefa
 - 🔄 Atualização automática da interface
 - 📡 Consumo de API REST simulada
+- ⚙️ Estado de loading
 
 ---
 
@@ -78,3 +95,6 @@ O projeto foi construído com foco em boas práticas de arquitetura frontend, or
 - Padronização automática de código antes do commit
 - Versionamento seguindo Conventional Commits
 
+## 👨‍💻 Autor
+
+Desenvolvido por Nicolas Andreos
