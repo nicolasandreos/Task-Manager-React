@@ -1,65 +1,66 @@
-# 📦 Como Rodar o Projeto Localmente
+# 📦 How to Run the Project Locally
 
 ```bash
-# Clonar o repositório
-🔗 **Deploy:** https://task-manager-react-six-rho.vercel.app
-📂 **Repositório:** git clone https://github.com/nicolasandreos/Task-Manager-React.git
+# Clone the repository
+🔗 **Live Demo:** https://task-manager-react-six-rho.vercel.app
+📂 **Repository:** git clone https://github.com/nicolasandreos/Task-Manager-React.git
 
-# Entrar na pasta
+# Navigate to the folder project
 cd Task-Manager-React
 
-# Instalar dependências
+# Install dependencies
 npm install
 
-# Rodar aplicação
+# Run the application
 npm run dev
 
-# Rodar fake API
+# Run fake API
 npx json-server --watch db.json --port 3000
 
 ---
 # 📝 Task Manager
 
-Aplicação web para gerenciamento de tarefas desenvolvida com React, consumindo uma API simulada (json-server).  
+Web application for task management developed with React, consuming a simulated API (json-server).
 
-O projeto foi construído com foco em boas práticas de arquitetura frontend, organização de código, padronização de commits e separação de responsabilidades.
+The project was built with a focus on frontend architecture best practices, code organization, commit standardization, and separation of responsibilities.
 ```
 
 ---
 
 ## 📸 Preview
 
-### 🏠 Tela Principal
+### 🏠 Home Screen
 ![Tela Principal](./docs/imagem1.png)
 
-### ➕ Criar Tarefa
+### ➕ Create Task
 ![Criar Tarefa](./docs/imagem2.png)
 
-### ✏️ Edição de Tarefa
+### ✏️ Edit Task
 ![Edição](./docs/imagem3.png)
 
-### 📌 Listagem de Tarefas
+### 📌 Task List
 ![Lista Terefas](./docs/imagem4.png)
 
 ## 🔗 API Repository
 
-A API simulada foi desenvolvida separadamente utilizando json-server para simular um ambiente backend independente.
-📂 Repositório da API: https://github.com/nicolasandreos/ToDoTasksReactAPI
+The simulated API was developed separately using json-server to replicate an independent backend environment.
 
-## 🚀 Funcionalidades
+📂 API RepositoryI: https://github.com/nicolasandreos/ToDoTasksReactAPI
 
-- ✅ Criar tarefas
-- ✏️ Editar tarefas
-- 🗑️ Excluir tarefas
-- 📋 Listar tarefas
-- 📌 Atualização de status da tarefa
-- 🔄 Atualização automática da interface
-- 📡 Consumo de API REST simulada
-- ⚙️ Estado de loading
+## 🚀 Features
+
+- ✅ Create tasks
+- ✏️ Edit tasks
+- 🗑️ Delete tasks
+- 📋 List tasks
+- 📌 Update task status
+- 🔄 Automatic UI updates
+- 📡 Simulated REST API consumption
+- ⚙️ Loading state handling
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Technologies Used
 
 ### ⚛️ Frontend
 - React
@@ -74,29 +75,29 @@ A API simulada foi desenvolvida separadamente utilizando json-server para simula
 ### 🗄️ Backend (Simulado)
 - json-server
 
-### 🧹 Padronização e Qualidade de Código
+### 🧹Code Standardization & Quality
 - ESLint
 - Prettier
 - Git Hooks (Husky + lint-staged)
 - Conventional Commits
 
-### 🚀 Deploy
+### 🚀 Deployment
 - Vercel
 
 ---
 
-## 🧠 Conceitos e Arquitetura Aplicados
+## 🧠 Concepts and Architecture Applied
 
-- Componentização e reutilização de componentes
-- Organização por responsabilidades
-- Criação de hooks customizados para requisições HTTP
-- Gerenciamento de estado assíncrono com React Query
-- Separação entre camada de serviço (API) e UI
-- Validação de formulários com React Hook Form
-- Configuração de Design System (cores e tipografia customizadas no Tailwind)
-- Padronização automática de código antes do commit
-- Versionamento seguindo Conventional Commits
+- Componentization and reusable components
+- Responsibility-based project structure
+- Custom hooks for HTTP requests
+- Asynchronous state management with React Query
+- Separation between service layer (API) and UI
+- Form validation with React Hook Form
+- Design System configuration (custom colors and typography in Tailwind)
+- Automatic code formatting before commits
+- Versioning following Conventional Commits
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
-Desenvolvido por Nicolas Andreos
+Developed by Nicolas Andreos
